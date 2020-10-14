@@ -20,6 +20,7 @@ type Setting struct {
 		Logical int
 		Dtype   int
 	}
+	Result string
 }
 
 func ReadSetting(filename string) (Setting, error) {
@@ -33,6 +34,7 @@ func ReadSetting(filename string) (Setting, error) {
 
 func readSettingFromYaml(fileBuffer []byte) (Setting, error) {
 	setting := Setting{}
+	setting.Result = "results"
 
 	err := yaml.Unmarshal(fileBuffer, &setting)
 	if err != nil {

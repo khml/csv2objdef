@@ -20,9 +20,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	const resultDir = "results"
-	csv2objdef.CreateDir(resultDir)
-
 	clsFormat, err := csv2objdef.ReadTxtFile(&formatPath)
 
 	setting, err := csv2objdef.ReadSetting("config.yml")
@@ -31,6 +28,8 @@ func main() {
 	}
 
 	fmt.Println(setting)
+
+	csv2objdef.CreateDir(setting.Result)
 
 	attrs := csv2objdef.ConvTblAttr(data,
 		setting.Header.Table,
@@ -43,7 +42,7 @@ func main() {
 
 	for _, def := range tblMap {
 		outputPath := csv2objdef.ToUpperCamelCase(csv2objdef.Singular(def.Name)) + "Dto.java"
-		outputPath = filepath.Join(resultDir, outputPath)
+		outputPath = filepath.Join(setting.Result, outputPath)
 		fmt.Println(outputPath)
 		_ = csv2objdef.WriteTxtFile(outputPath, def.AttrFormat(4, clsFormat))
 	}
