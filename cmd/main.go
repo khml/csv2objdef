@@ -29,7 +29,7 @@ func main() {
 
 	fmt.Println(setting)
 
-	csv2objdef.CreateDir(setting.Result)
+	csv2objdef.CreateDir(setting.Result.Dir)
 
 	attrs := csv2objdef.ConvTblAttr(data,
 		setting.Header.Table,
@@ -41,8 +41,8 @@ func main() {
 	tblMap := csv2objdef.GenTblMap(attrs, &dtypeMap)
 
 	for _, def := range tblMap {
-		outputPath := csv2objdef.ToUpperCamelCase(csv2objdef.Singular(def.Name)) + "Dto.java"
-		outputPath = filepath.Join(setting.Result, outputPath)
+		outputPath := setting.Result.Prefix + csv2objdef.ToUpperCamelCase(csv2objdef.Singular(def.Name)) + setting.Result.Suffix
+		outputPath = filepath.Join(setting.Result.Dir, outputPath)
 		fmt.Println(outputPath)
 		_ = csv2objdef.WriteTxtFile(outputPath, def.AttrFormat(4, clsFormat))
 	}
