@@ -50,7 +50,7 @@ func (t TblDef) AttrFormat(indent int, classFormat string) string {
 	for _, attr := range t.Attr {
 		result += attr.AttrFormat(indent) + "\n"
 	}
-	return fmt.Sprintf(classFormat, t.Name, ToUpperCamelCase(t.Name), result)
+	return fmt.Sprintf(classFormat, t.Name, Singular(ToUpperCamelCase(t.Name)), result)
 }
 
 func ConvTblAttr(data [][]string, tbl int, col int, logical int, dtype int) []TblAttr {

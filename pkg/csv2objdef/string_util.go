@@ -18,3 +18,7 @@ func ToUpperCamelCase(str string) string {
 func Plural(str string) string {
 	return plu.Plural(str)
 }
+
+func Singular(str string) string {
+	return plu.Singular(str)
+}
