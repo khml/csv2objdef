@@ -14,6 +14,12 @@ type Dtype struct {
 
 type Setting struct {
 	Dtypes []Dtype
+	Header struct {
+		Table   int
+		Column  int
+		Logical int
+		Dtype   int
+	}
 }
 
 func ReadSetting(filename string) (Setting, error) {

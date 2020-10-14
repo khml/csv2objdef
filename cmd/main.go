@@ -25,12 +25,18 @@ func main() {
 
 	clsFormat, err := csv2objdef.ReadTxtFile(&formatPath)
 
-	attrs := csv2objdef.ConvTblAttr(data, 0, 1, 2, 3)
-
 	setting, err := csv2objdef.ReadSetting("config.yml")
 	if err != nil {
 		log.Fatalf("Read config.yml error")
 	}
+
+	fmt.Println(setting)
+
+	attrs := csv2objdef.ConvTblAttr(data,
+		setting.Header.Table,
+		setting.Header.Column,
+		setting.Header.Logical,
+		setting.Header.Dtype)
 
 	dtypeMap := csv2objdef.MakeDtypeMap(&setting)
 	tblMap := csv2objdef.GenTblMap(attrs, &dtypeMap)

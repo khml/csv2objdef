@@ -14,7 +14,7 @@ type TblAttr struct {
 
 func (t *TblAttr) FormatAttr(dtypeMap DtypeMap) {
 	t.Table = Plural(t.Table)
-	t.Col = SnakeToCamelCase(t.Col)
+	t.Col = ToCamelCase(t.Col)
 
 	s, ok := dtypeMap[strings.TrimSpace(t.Dtype)]
 	if ok {
@@ -50,7 +50,7 @@ func (t TblDef) AttrFormat(indent int, classFormat string) string {
 	for _, attr := range t.Attr {
 		result += attr.AttrFormat(indent) + "\n"
 	}
-	return fmt.Sprintf(classFormat, t.Name, result)
+	return fmt.Sprintf(classFormat, t.Name, ToUpperCamelCase(t.Name), result)
 }
 
 func ConvTblAttr(data [][]string, tbl int, col int, logical int, dtype int) []TblAttr {

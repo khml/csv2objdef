@@ -7,8 +7,12 @@ import (
 
 var plu = pluralize.NewClient()
 
-func SnakeToCamelCase(str string) string {
+func ToCamelCase(str string) string {
 	return strcase.ToLowerCamel(str)
+}
+
+func ToUpperCamelCase(str string) string {
+	return strcase.ToCamel(str)
 }
 
 func Plural(str string) string {
