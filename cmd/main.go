@@ -42,7 +42,8 @@ func main() {
 	tblMap := csv2objdef.GenTblMap(attrs, &dtypeMap)
 
 	for _, def := range tblMap {
-		outputPath := filepath.Join(resultDir, def.Name+"Dto.java")
+		outputPath := csv2objdef.ToCamelCase(def.Name) + "Dto.java"
+		outputPath = filepath.Join(resultDir, outputPath)
 		fmt.Println(outputPath)
 		_ = csv2objdef.WriteTxtFile(outputPath, def.AttrFormat(4, clsFormat))
 	}
