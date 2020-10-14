@@ -1,0 +1,6 @@
+dtypes:
+  - type: "@INT"
+    stype: Integer
+
+  - type: text
+    stype: String
