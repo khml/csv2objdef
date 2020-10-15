@@ -53,9 +53,9 @@ func (t TblDef) AttrFormat(indent int, classFormat string) string {
 	return fmt.Sprintf(classFormat, t.Name, Singular(ToUpperCamelCase(t.Name)), result)
 }
 
-func ConvTblAttr(data [][]string, tbl int, col int, logical int, dtype int) []TblAttr {
+func ConvTblAttr(data *[][]string, tbl int, col int, logical int, dtype int) []TblAttr {
 	var attrs []TblAttr
-	for _, r := range data {
+	for _, r := range *data {
 		attrs = append(attrs,
 			TblAttr{Table: r[tbl], Col: r[col], Lgcl: r[logical], Dtype: r[dtype]},
 		)
@@ -63,10 +63,10 @@ func ConvTblAttr(data [][]string, tbl int, col int, logical int, dtype int) []Tb
 	return attrs
 }
 
-func GenTblMap(tblAttrs []TblAttr, dtypeMap *DtypeMap) map[string]TblDef {
+func GenTblMap(tblAttrs *[]TblAttr, dtypeMap *DtypeMap) map[string]TblDef {
 	var tableMap = make(map[string]*TblDef)
 
-	for _, attr := range tblAttrs {
+	for _, attr := range *tblAttrs {
 		attr.FormatAttr(*dtypeMap)
 		_, ok := tableMap[attr.Table]
 		if !ok {

@@ -30,20 +30,32 @@ func main() {
 	fmt.Println(setting)
 
 	csv2objdef.CreateDir(setting.Result.Dir)
+	attrs := createAttrs(&data, &setting)
+	dtypeMap := csv2objdef.MakeDtypeMap(&setting)
+	tblMap := csv2objdef.GenTblMap(&attrs, &dtypeMap)
 
+	for _, def := range tblMap {
+		outputPath := createFilePath(def.Name, &setting)
+		err = csv2objdef.WriteTxtFile(outputPath, def.AttrFormat(4, clsFormat))
+		if err != nil {
+			_ = fmt.Errorf("output error. file = %s\n", outputPath)
+		} else {
+			fmt.Println(outputPath)
+		}
+	}
+}
+
+func createFilePath(baseName string, setting *csv2objdef.Setting) string {
+	outputPath := setting.Result.Prefix + csv2objdef.ToUpperCamelCase(csv2objdef.Singular(baseName)) + setting.Result.Suffix
+	outputPath = filepath.Join(setting.Result.Dir, outputPath)
+	return outputPath
+}
+
+func createAttrs(data *[][]string, setting *csv2objdef.Setting) []csv2objdef.TblAttr {
 	attrs := csv2objdef.ConvTblAttr(data,
 		setting.Header.Table,
 		setting.Header.Column,
 		setting.Header.Logical,
 		setting.Header.Dtype)
-
-	dtypeMap := csv2objdef.MakeDtypeMap(&setting)
-	tblMap := csv2objdef.GenTblMap(attrs, &dtypeMap)
-
-	for _, def := range tblMap {
-		outputPath := setting.Result.Prefix + csv2objdef.ToUpperCamelCase(csv2objdef.Singular(def.Name)) + setting.Result.Suffix
-		outputPath = filepath.Join(setting.Result.Dir, outputPath)
-		fmt.Println(outputPath)
-		_ = csv2objdef.WriteTxtFile(outputPath, def.AttrFormat(4, clsFormat))
-	}
+	return attrs
 }
