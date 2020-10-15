@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -32,7 +33,8 @@ func main() {
 	csv2objdef.CreateDir(setting.Result.Dir)
 	attrs := createAttrs(&data, &setting)
 	dtypeMap := csv2objdef.MakeDtypeMap(&setting)
-	tblMap := csv2objdef.GenTblMap(&attrs, &dtypeMap)
+	attrs = replaceDtypes(&attrs, dtypeMap)
+	tblMap := csv2objdef.GenTblMap(&attrs)
 
 	for _, def := range tblMap {
 		outputPath := createFilePath(def.Name, &setting)
@@ -58,4 +60,16 @@ func createAttrs(data *[][]string, setting *csv2objdef.Setting) []csv2objdef.Tbl
 		setting.Header.Logical,
 		setting.Header.Dtype)
 	return attrs
+}
+
+func replaceDtypes(attrs *[]csv2objdef.TblAttr, dtypeMap csv2objdef.DtypeMap) []csv2objdef.TblAttr {
+	var newAttar []csv2objdef.TblAttr
+	for _, attr := range *attrs {
+		s, ok := dtypeMap[strings.TrimSpace(attr.Dtype)]
+		if ok {
+			attr.Dtype = s
+		}
+		newAttar = append(newAttar, attr)
+	}
+	return newAttar
 }
