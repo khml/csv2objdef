@@ -26,7 +26,7 @@ func (t *TblAttr) AttrFormat(indent int) string {
 	var result string
 	space := strings.Repeat(" ", indent)
 	result += space + "// " + t.Lgcl + ";\n"
-	result += space + "private " + t.Dtype + " " + t.Col + ";\n"
+	result += space + "private " + t.Dtype + " " + ToCamelCase(t.Col) + ";\n"
 	return result
 }
 
