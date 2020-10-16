@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type CsvHeader = []string
@@ -66,4 +67,19 @@ func (c *CsvData) ToTableMap(keyIdx int) (TableMap, error) {
 	}
 
 	return tableMap, nil
+}
+
+func (c *CsvData) ReplaceDtype(typeIdx int, dtypeMap *DtypeMap) error {
+	if typeIdx >= len(c.Header) {
+		return fmt.Errorf("keyIdx = %d is Out of range", typeIdx)
+	}
+
+	for _, record := range c.Records {
+		s, ok := (*dtypeMap)[strings.TrimSpace(record[typeIdx])]
+		if ok {
+			record[typeIdx] = s
+		}
+	}
+
+	return nil
 }
