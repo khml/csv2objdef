@@ -11,12 +11,12 @@ import (
 
 func main() {
 	if len(os.Args) <= 2 {
-		log.Fatalf("Usage: %s path/to/csv path/to/format.txt\n", os.Args[0])
+		log.Fatalf("Usage: %s path/to/csvRecords path/to/format.txt\n", os.Args[0])
 	}
 
 	csvPath := os.Args[1]
 	formatPath := os.Args[2]
-	data, err := csv2objdef.ReadCsv(&csvPath, 1)
+	csvRecords, err := csv2objdef.ReadCsv(&csvPath, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,8 +30,8 @@ func main() {
 
 	fmt.Println(setting)
 
-	csv2objdef.CreateDir(setting.Result.Dir)
-	attrs := createAttrs(&data, &setting)
+	_ = csv2objdef.CreateDir(setting.Result.Dir)
+	attrs := createAttrs(&csvRecords, &setting)
 	dtypeMap := csv2objdef.MakeDtypeMap(&setting)
 	attrs = replaceDtypes(&attrs, dtypeMap)
 	tblMap := csv2objdef.GenTblMap(&attrs)
@@ -53,7 +53,7 @@ func createFilePath(baseName string, setting *csv2objdef.Setting) string {
 	return outputPath
 }
 
-func createAttrs(data *[][]string, setting *csv2objdef.Setting) []csv2objdef.TblAttr {
+func createAttrs(data *csv2objdef.CsvRecords, setting *csv2objdef.Setting) []csv2objdef.TblAttr {
 	attrs := csv2objdef.ConvTblAttr(data,
 		setting.Header.Table,
 		setting.Header.Column,

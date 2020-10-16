@@ -63,7 +63,9 @@ func ConvTblAttr(data *[][]string, tbl int, col int, logical int, dtype int) []T
 	return attrs
 }
 
-func GenTblMap(tblAttrs *[]TblAttr) map[string]TblDef {
+type TblMap = map[string]TblDef
+
+func GenTblMap(tblAttrs *[]TblAttr) TblMap {
 	var tableMap = make(map[string]*TblDef)
 
 	for _, attr := range *tblAttrs {

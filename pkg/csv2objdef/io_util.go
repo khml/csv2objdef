@@ -3,7 +3,6 @@ package csv2objdef
 import (
 	"encoding/csv"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -30,7 +29,9 @@ func WriteTxtFile(txtPath string, content string) error {
 	return nil
 }
 
-func ReadCsv(filepath *string, skipRowNum int) ([][]string, error) {
+type CsvRecords = [][]string
+
+func ReadCsv(filepath *string, skipRowNum int) (CsvRecords, error) {
 	var records [][]string
 
 	f, err := os.Open(*filepath)
@@ -56,11 +57,10 @@ func ReadCsv(filepath *string, skipRowNum int) ([][]string, error) {
 	return records, nil
 }
 
-func CreateDir(dirname string) {
+func CreateDir(dirname string) error {
 	if _, err := os.Stat(dirname); os.IsNotExist(err) {
 		err = os.Mkdir(dirname, 0777)
-		if err != nil {
-			log.Fatal(err)
-		}
+		return err
 	}
+	return nil
 }
