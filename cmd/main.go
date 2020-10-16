@@ -16,7 +16,7 @@ func main() {
 
 	csvPath := os.Args[1]
 	formatPath := os.Args[2]
-	csvRecords, err := csv2objdef.ReadCsv(&csvPath, 1)
+	csvData, err := csv2objdef.ReadCsv(csvPath, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +31,7 @@ func main() {
 	fmt.Println(setting)
 
 	_ = csv2objdef.CreateDir(setting.Result.Dir)
-	attrs := createAttrs(&csvRecords, &setting)
+	attrs := createAttrs(&csvData.Records, &setting)
 	dtypeMap := csv2objdef.MakeDtypeMap(&setting)
 	attrs = replaceDtypes(&attrs, dtypeMap)
 	tblMap := csv2objdef.GenTblMap(&attrs)

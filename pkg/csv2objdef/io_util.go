@@ -29,32 +29,46 @@ func WriteTxtFile(txtPath string, content string) error {
 	return nil
 }
 
+type CsvHeader = []string
 type CsvRecords = [][]string
 
-func ReadCsv(filepath *string, skipRowNum int) (CsvRecords, error) {
-	var records [][]string
+type CsvData struct {
+	Header  CsvHeader
+	Records CsvRecords
+}
 
-	f, err := os.Open(*filepath)
+func ReadCsv(filepath string, skipRowNum int) (CsvData, error) {
+	var records CsvRecords
+
+	f, err := os.Open(filepath)
 	if err != nil {
-		return nil, err
+		return CsvData{}, err
 	}
 	defer f.Close()
 
 	reader := csv.NewReader(f)
 
-	for {
-		l, err := reader.Read()
-		if skipRowNum > 0 {
-			skipRowNum--
-			continue
+	// skip rows
+	for i := skipRowNum; i > 0; i-- {
+		_, err := reader.Read()
+		if err != nil {
+			return CsvData{}, err
 		}
+	}
 
+	csvHeader, err := reader.Read()
+	if err != nil {
+		return CsvData{}, err
+	}
+
+	for {
+		r, err := reader.Read()
 		if err != nil {
 			break
 		}
-		records = append(records, l)
+		records = append(records, r)
 	}
-	return records, nil
+	return CsvData{Header: csvHeader, Records: records}, nil
 }
 
 func CreateDir(dirname string) error {

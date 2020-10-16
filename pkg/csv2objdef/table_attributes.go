@@ -53,9 +53,9 @@ func (t TblDef) AttrFormat(indent int, classFormat string) string {
 	return fmt.Sprintf(classFormat, t.Name, Singular(ToUpperCamelCase(t.Name)), result)
 }
 
-func ConvTblAttr(data *[][]string, tbl int, col int, logical int, dtype int) []TblAttr {
+func ConvTblAttr(csvRecords *CsvRecords, tbl int, col int, logical int, dtype int) []TblAttr {
 	var attrs []TblAttr
-	for _, r := range *data {
+	for _, r := range *csvRecords {
 		attrs = append(attrs,
 			TblAttr{Table: r[tbl], Col: r[col], Lgcl: r[logical], Dtype: r[dtype]},
 		)
