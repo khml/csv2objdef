@@ -28,8 +28,6 @@ func main() {
 		log.Fatalf("Read config.yml error")
 	}
 
-	fmt.Println(setting)
-
 	_ = csv2objdef.CreateDir(setting.Result.Dir)
 	attrs := createAttrs(&csvData.Records, &setting)
 	dtypeMap := csv2objdef.MakeDtypeMap(&setting)

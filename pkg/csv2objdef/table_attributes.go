@@ -12,16 +12,6 @@ type TblAttr struct {
 	Dtype string
 }
 
-func (t *TblAttr) FormatAttr(dtypeMap DtypeMap) {
-	t.Table = Plural(t.Table)
-	t.Col = ToCamelCase(t.Col)
-
-	s, ok := dtypeMap[strings.TrimSpace(t.Dtype)]
-	if ok {
-		t.Dtype = s
-	}
-}
-
 func (t *TblAttr) AttrFormat(indent int) string {
 	var result string
 	space := strings.Repeat(" ", indent)
